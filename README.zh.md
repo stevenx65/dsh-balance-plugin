@@ -12,6 +12,10 @@ DeepSeek Harness(dsh)web 插件:在 3080 端口的侧边栏底部显示 **DeepSe
 - 🔄 今日/累计切换:今日(北京时间当天)或全部历史
 - 🎨 深色/浅色自动适配 + 刷新按钮 + 关闭按钮
 
+## 截图
+
+![dsh-balance-plugin](docs/screenshot.png)
+
 ## 一键安装(从插件市场)
 
 ```sh

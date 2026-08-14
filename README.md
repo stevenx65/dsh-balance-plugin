@@ -12,6 +12,10 @@ A DeepSeek Harness (dsh) web plugin: shows **DeepSeek API balance** and **token 
 - 🔄 Today / All-time toggle: today (Beijing time) or full history
 - 🎨 Auto-adapts to light/dark theme + refresh button + close button
 
+## Screenshot
+
+![dsh-balance-plugin](docs/screenshot.png)
+
 ## Install (from the plugin market)
 
 ```sh
