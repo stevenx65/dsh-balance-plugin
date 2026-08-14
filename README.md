@@ -4,11 +4,9 @@ DeepSeek Harness(dsh)web 插件:在 3080 端口的侧边栏底部显示 **DeepSe
 
 ## 功能
 
-- 💰 余额:调 DeepSeek 官方 `GET /user/balance`,key 复用 dsh 的 credentials(`~/.dsh/.credentials.yaml`),无需手动填
+- 💰 余额:调用 DeepSeek 官方 `GET /user/balance`,key 复用 dsh 的 credentials(`~/.dsh/.credentials.yaml`)
 - 📊 token 用量:读取 dsh 原始 session 日志(`session.jsonl.zstd`),按 provider 过滤后聚合
   - 未缓存输入 / 缓存读取 / 输出 / 模型调用次数
-- 🔄 今日/累计切换:今日(北京时间当天)或全部历史
-- 🎨 黑色面板 + 刷新按钮 + 关闭按钮
 
 ## 架构
 
