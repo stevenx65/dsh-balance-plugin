@@ -1,7 +1,7 @@
 {
   "name": "dsh-balance-plugin",
   "version": "0.1.0",
-  "private": true,
+  "description": "DeepSeek API balance and token usage monitor for the dsh web sidebar",
   "type": "module",
   "main": "index.js",
   "exports": {
@@ -9,12 +9,36 @@
     "./client": "./client.js",
     "./package.json": "./package.json"
   },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
   "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "platform": "web",
       "inject": [
         "@deepseek-ai/dsh-client-ui-primitives"
       ]
     }
-  }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-client-ui-primitives": "0.1.0-rc.6"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek",
+    "deepseek-harness",
+    "plugin",
+    "balance",
+    "usage",
+    "dsh-plugin"
+  ],
+  "license": "MIT"
 }

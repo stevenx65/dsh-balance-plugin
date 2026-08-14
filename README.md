@@ -1,61 +1,68 @@
 # dsh-balance-plugin
 
-DeepSeek Harness(dsh)web 插件:在 3080 端口的侧边栏底部显示 **DeepSeek API 余额** 和 **token 用量**,支持 **今日/累计** 切换,并按 provider 过滤(只统计 `deepseek-official`,忽略其他厂商)。
+[![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
 
-## 功能
+A DeepSeek Harness (dsh) web plugin: shows **DeepSeek API balance** and **token usage** at the bottom of the web sidebar (port 3080), with a **Today / All-time** toggle, filtered by provider (only `deepseek-official`, ignoring other vendors).
 
-- 💰 余额:调用 DeepSeek 官方 `GET /user/balance`,key 复用 dsh 的 credentials(`~/.dsh/.credentials.yaml`)
-- 📊 token 用量:读取 dsh 原始 session 日志(`session.jsonl.zstd`),按 provider 过滤后聚合
-  - 未缓存输入 / 缓存读取 / 输出 / 模型调用次数
+## Features
 
-## 架构
+- 💰 Balance: calls DeepSeek's official `GET /user/balance`, reusing dsh's credentials (`~/.dsh/.credentials.yaml`) — no manual key entry
+- 📊 Token usage: reads dsh session logs (`session.jsonl.zstd`), aggregates by provider
+  - Uncached input / cache read / output / model call count
+- 🔄 Today / All-time toggle: today (Beijing time) or full history
+- 🎨 Auto-adapts to light/dark theme + refresh button + close button
+
+## Install (from the plugin market)
+
+```sh
+dsh plugin --profile web add dsh-balance-plugin
+```
+
+Restart `dsh web`, then refresh the page — a balance button appears at the bottom of the sidebar.
+
+## Architecture
 
 ```
-浏览器(3080 页面)
+Browser (3080 page)
   client.js ──fetch──▶ /dsh-balance/data?scope=today|all
                               │
-node 端(index.js,运行在 dsh 进程内)
-  ├── credentials.resolve("DEEPSEEK_API_KEY")  ← 复用 dsh 的 key
+node side (index.js, inside the dsh process)
+  ├── credentials.resolve("DEEPSEEK_API_KEY")  ← reuses dsh's key
   ├── fetch(https://api.deepseek.com/user/balance)
-  └── 解压 ~/.dsh/sessions/*/*/session.jsonl.zstd
-      逐行过滤 assistant/message + provider=deepseek-official
+  └── decompress ~/.dsh/sessions/*/*/session.jsonl.zstd
+      filter assistant/message rows + provider=deepseek-official
 ```
 
-- `index.js`:node 端 cordis 插件,注册 HTTP 路由 `/dsh-balance/data`
-- `client.js`:浏览器端插件,注入 `sidebar.footer.action`(侧边栏底部按钮 + 黑色浮层)
-- `package.json`:`dsh.client.platform: "web"` + `exports["./client"]`,供 `dsh-client-modules` 扫描
+- `index.js`: node-side cordis plugin, registers HTTP route `/dsh-balance/data`
+- `client.js`: browser-side plugin, injects into `sidebar.footer.action` (sidebar bottom button + floating panel)
+- `package.json`: `dsh.bundle` + `dsh.client.platform: "web"` + `exports["./client"]`
+- `cordis.patch.yml`: bundle patch registering the node entry
 
-## 安装
-
-1. 把 `dsh-balance-plugin` 目录放到 web profile 的 node_modules:
+## Manual install
 
 ```sh
 mkdir -p ~/.dsh/profiles/web/node_modules/dsh-balance-plugin
-cp index.js client.js package.json ~/.dsh/profiles/web/node_modules/dsh-balance-plugin/
+cp index.js client.js cordis.patch.yml package.json ~/.dsh/profiles/web/node_modules/dsh-balance-plugin/
 ```
 
-2. 编辑 `~/.dsh/profiles/web/cordis.patch.yml`,加入:
+Then add to `~/.dsh/profiles/web/cordis.patch.yml`:
 
 ```yaml
 - insert:
     - id: dsh-balance
-      name: 'dsh-balance-plugin'
+      name: dsh-balance-plugin
 ```
 
-3. 重启 dsh web(如 tmux 里:`tmux send-keys -t dsh C-c` 然后 `dsh web`)
+Restart `dsh web` and refresh the browser.
 
-4. 刷新浏览器 3080 页面,侧边栏底部出现余额按钮
+## Dependencies
 
-## 依赖
+- node side: Node built-ins only (`node:fs`, `node:child_process`, `node:path`); requires the `zstd` CLI for decompressing session logs
+- browser side: `@deepseek-ai/dsh-client-ui-primitives` (peer dep, ships with dsh 0.1.0-rc.6)
 
-- node 端:仅 Node 内置模块(`node:fs`、`node:child_process`、`node:path` 等),需要系统有 `zstd` CLI 用于解压 session 日志
-- 浏览器端:依赖 dsh 自带的 `@deepseek-ai/dsh-client-ui-primitives`(图标组件),dsh 0.1.0-rc.6 自带,无需额外安装
+## Data source
 
-## 数据来源
-
-原始会话日志位置:`~/.dsh/sessions/<scope>/<session-id>/session.jsonl.zstd`
-
-每条 `assistant/message` 行含:
+Session logs at `~/.dsh/sessions/<scope>/<session-id>/session.jsonl.zstd`. Each `assistant/message` row:
 
 ```json
 {
@@ -68,10 +75,10 @@ cp index.js client.js package.json ~/.dsh/profiles/web/node_modules/dsh-balance-
 }
 ```
 
-## 打包
+## Pack
 
 ```sh
-npm pack   # 生成 dsh-balance-plugin-0.1.0.tgz
+npm pack   # produces dsh-balance-plugin-0.1.0.tgz
 ```
 
 ## License
