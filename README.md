@@ -10,7 +10,7 @@ A DeepSeek Harness (dsh) web plugin: shows **DeepSeek API balance** and **token 
 - 📊 Token usage: reads dsh session logs (`session.jsonl.zstd`), aggregates by provider
   - Uncached input / cache read / output / model call count
 - 🔄 Today / All-time toggle: today (Beijing time) or full history
-- 🎨 Auto-adapts to light/dark theme + refresh button + close button
+- 🎨 Auto-adapts to light/dark theme
 
 ## Screenshot
 

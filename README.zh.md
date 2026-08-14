@@ -10,7 +10,7 @@ DeepSeek Harness(dsh)web 插件:在 3080 端口的侧边栏底部显示 **DeepSe
 - 📊 token 用量:读取 dsh 原始 session 日志(`session.jsonl.zstd`),按 provider 过滤后聚合
   - 未缓存输入 / 缓存读取 / 输出 / 模型调用次数
 - 🔄 今日/累计切换:今日(北京时间当天)或全部历史
-- 🎨 深色/浅色自动适配 + 刷新按钮 + 关闭按钮
+- 🎨 深色/浅色自动适配
 
 ## 截图
 
